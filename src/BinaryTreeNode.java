@@ -71,10 +71,8 @@ public class BinaryTreeNode {
             return allNodes;
         }
 
-        allNodes.add(currentNode);
-
         BinaryTreeNode.getChildNodes(allNodes, currentNode);
-
+        allNodes.add(currentNode);
 
         return allNodes;
 

@@ -2,9 +2,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean success = false;
-
-        BinaryTreeNode checkedNode = null;
         BinaryTree testBinaryTree = new BinaryTree();
 
         System.out.println(testBinaryTree.addNewNode(15));
@@ -28,9 +25,17 @@ public class Main {
         System.out.println(testBinaryTree.addNewNode(55));
         System.out.println(testBinaryTree.addNewNode(5));
 
+        //1st attempt
         testBinaryTree.printAllNodes();
+        System.out.println("\n");
 
-        checkedNode = testBinaryTree.findNode(14);
+        System.out.println("Now testing Postorder Traversal:");
+        testBinaryTree.returnAllNodes(BinaryTree.TraversalTypes.POSTORDER);
+        System.out.println("Now testing Preorder Traversal:");
+        testBinaryTree.returnAllNodes(BinaryTree.TraversalTypes.PREORDER);
+        System.out.println("Now testing Inorder Traversal:");
+        testBinaryTree.returnAllNodes(BinaryTree.TraversalTypes.INORDER);
+
         testBinaryTree.findNode(37);
         testBinaryTree.findNode(100);
         testBinaryTree.findNode(89);

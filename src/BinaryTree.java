@@ -2,11 +2,22 @@ import java.util.ArrayList;
 
 public class BinaryTree {
 
-    BinaryTreeNode rootNode = null;
+    private BinaryTreeNode rootNode = null;
+
+    enum TraversalTypes
+    {
+        INORDER,
+        PREORDER,
+        POSTORDER
+    }
 
     public BinaryTree ()
     {
 
+    }
+
+    public BinaryTreeNode getRootNode() {
+        return rootNode;
     }
 
     public BinaryTree (int RootKeyValue)
@@ -76,6 +87,58 @@ public class BinaryTree {
 
     }
 
+    public void returnAllNodes(TraversalTypes traversalType)
+    {
+        if (traversalType == TraversalTypes.POSTORDER)
+        {
+            this.postOrderTraversal(this.getRootNode());
+        }
+        else if (traversalType == TraversalTypes.PREORDER)
+        {
+            this.preOrderTraversal(this.getRootNode());
+        }
+        else if (traversalType == TraversalTypes.INORDER)
+        {
+            this.inOrderTraversal(this.getRootNode());
+        }
+        System.out.println("\n");
+    }
+
+    private void postOrderTraversal(BinaryTreeNode rootNode)
+    {
+        if (rootNode == null)
+        {
+            return;
+        }
+
+        postOrderTraversal(rootNode.getLeftChildNode());
+        postOrderTraversal(rootNode.getRightChildNode());
+        System.out.print(rootNode.getNodeKey() + ",");
+    }
+
+    private void preOrderTraversal(BinaryTreeNode rootNode)
+    {
+        if (rootNode == null)
+        {
+            return;
+        }
+        System.out.print(rootNode.getNodeKey() + ",");
+        preOrderTraversal(rootNode.getLeftChildNode());
+        preOrderTraversal(rootNode.getRightChildNode());
+    }
+
+    private void inOrderTraversal(BinaryTreeNode rootNode)
+    {
+        if (rootNode == null)
+        {
+            return;
+        }
+        inOrderTraversal(rootNode.getLeftChildNode());
+        System.out.print(rootNode.getNodeKey() + ",");
+        inOrderTraversal(rootNode.getRightChildNode());
+
+    }
+
     //Search for a node
     public BinaryTreeNode findNode(int KeyValue)
     {
@@ -107,6 +170,7 @@ public class BinaryTree {
     //have it's parent node reference it's child node
     //have it reference no nodes
 
+    //TODO: Implement Delete Node and call in Main
     public void deleteNode (int KeyValue)
     {
         BinaryTreeNode toDeleteNode = null;
