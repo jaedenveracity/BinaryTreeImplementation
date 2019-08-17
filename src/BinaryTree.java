@@ -112,13 +112,11 @@ public class BinaryTree {
         BinaryTreeNode toDeleteNode = null;
         toDeleteNode = this.findNode(KeyValue);
 
-        if (toDeleteNode != null)
-        {
-            toDeleteNode = null;
-        }
+        System.out.println("Node to be deleted with value of: " + toDeleteNode);
+
     }
 
-    //Check hello
+    
 
 
 }

@@ -38,7 +38,7 @@ public class Main {
 
         testBinaryTree.deleteNode(55);
 
-        testBinaryTree.printAllNodes();
+        //testBinaryTree.printAllNodes();
 
 
     }
