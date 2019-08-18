@@ -3,6 +3,7 @@ public class Main {
     public static void main(String[] args) {
 
         BinaryTree testBinaryTree = new BinaryTree();
+        int testValue;
 
         System.out.println(testBinaryTree.addNewNode(15));
         System.out.println(testBinaryTree.addNewNode(22));
@@ -41,7 +42,10 @@ public class Main {
         testBinaryTree.findNode(89);
         testBinaryTree.findNode(55);
 
-        testBinaryTree.deleteNode(55);
+        BinaryTreeNode checkedNode = testBinaryTree.findParentNode(45);
+
+        testBinaryTree.deleteNode(13);
+        testBinaryTree.deleteNode(75);
 
         //testBinaryTree.printAllNodes();
 

@@ -136,7 +136,6 @@ public class BinaryTree {
         inOrderTraversal(rootNode.getLeftChildNode());
         System.out.print(rootNode.getNodeKey() + ",");
         inOrderTraversal(rootNode.getRightChildNode());
-
     }
 
     //Search for a node
@@ -166,6 +165,32 @@ public class BinaryTree {
         }
     }
 
+    public BinaryTreeNode findParentNode(int KeyValue)
+    {
+        BinaryTreeNode currentNode = this.rootNode;
+        BinaryTreeNode parentNode = null;
+
+        while(true)
+        {
+            if(KeyValue < currentNode.getNodeKey())
+            {
+                parentNode = currentNode;
+                currentNode = currentNode.getLeftChildNode();
+            }
+            else if (KeyValue > currentNode.getNodeKey())
+            {
+                parentNode = currentNode;
+                currentNode = currentNode.getRightChildNode();
+            }
+            else if (KeyValue == currentNode.getNodeKey())
+            {
+                return parentNode;
+            }
+
+        }
+
+    }
+
     //Delete a node -- cut off whatever is referencing it
     //have it's parent node reference it's child node
     //have it reference no nodes
@@ -173,10 +198,145 @@ public class BinaryTree {
     //TODO: Implement Delete Node and call in Main
     public void deleteNode (int KeyValue)
     {
-        BinaryTreeNode toDeleteNode = null;
-        toDeleteNode = this.findNode(KeyValue);
+        System.out.println("Attempting to delete node with key value of: " + KeyValue + ".");
 
-        System.out.println("Node to be deleted with value of: " + toDeleteNode);
+        if (this.findNode(KeyValue) == null)
+        {
+            System.out.println("The value: " + KeyValue + ", does not exist in the tree.");
+            return;
+        }
+
+        BinaryTreeNode toDeleteNode = null;
+        BinaryTreeNode parentNode = null;
+        BinaryTreeNode leftChildNode = null;
+        BinaryTreeNode rightChildNode = null;
+        BinaryTreeNode nextInOrderNode = null;
+
+        toDeleteNode = this.findNode(KeyValue);
+        parentNode = this.findParentNode(KeyValue);
+        leftChildNode = toDeleteNode.getLeftChildNode();
+        rightChildNode = toDeleteNode.getRightChildNode();
+
+
+
+        //Node is a leaf node --------------------
+        if (toDeleteNode.getLeftChildNode() == null & toDeleteNode.getRightChildNode() == null)
+        {
+            if (parentNode.getRightChildNode() == toDeleteNode)
+            {
+
+                parentNode.setRightChildNode(null);
+            }
+            else if (parentNode.getLeftChildNode() == toDeleteNode)
+            {
+                parentNode.setLeftChildNode(null);
+            }
+            else if (toDeleteNode == this.getRootNode())
+            {
+                System.out.println("Node is also the root Node so now the tree is empty!");
+                this.rootNode = null;
+            }
+        }
+
+        //-----------------------------------------
+
+        //Parent is a value - one child either side
+        //right of parent
+        //root node with one subtree
+        if (toDeleteNode == this.getRootNode())
+        {
+            if (toDeleteNode.getLeftChildNode() == null)
+            {
+                this.rootNode = toDeleteNode.getRightChildNode();
+            }
+            else if (toDeleteNode.getRightChildNode() == null)
+            {
+                this.rootNode = toDeleteNode.getLeftChildNode();
+            }
+        }
+        else if (toDeleteNode.getNodeKey() > parentNode.getNodeKey())
+        {
+            if (toDeleteNode.getLeftChildNode() == null)
+            {
+                parentNode.setRightChildNode(toDeleteNode.getRightChildNode());
+            }
+            if (toDeleteNode.getRightChildNode() == null)
+            {
+                parentNode.setRightChildNode(toDeleteNode.getLeftChildNode());
+            }
+
+        }
+        //left of parent
+        else if (toDeleteNode.getNodeKey() < parentNode.getNodeKey())
+        {
+            if (toDeleteNode.getLeftChildNode() == null)
+            {
+                parentNode.setLeftChildNode(toDeleteNode.getRightChildNode());
+            }
+            if (toDeleteNode.getRightChildNode() == null)
+            {
+                parentNode.setLeftChildNode(toDeleteNode.getLeftChildNode());
+            }
+        }
+
+        //toDeleteNode has two children
+        //right of parent -- get next inorder value and replace it
+
+        if (toDeleteNode.getRightChildNode() != null & toDeleteNode.getLeftChildNode() != null)
+        {
+            System.out.println("Node has a right and left subtree - gonna be fun!");
+            System.out.println("Node with value: " + toDeleteNode + " - has a parent value of: " + parentNode + ", a left child with value: " + toDeleteNode.getLeftChildNode() + ", and a right child with value: " + toDeleteNode.getRightChildNode())  ;
+            nextInOrderNode = toDeleteNode.getRightChildNode();
+
+            while (nextInOrderNode.getLeftChildNode() != null)
+            {
+                nextInOrderNode = nextInOrderNode.getLeftChildNode();
+            }
+            System.out.println("Next in order key value found with a value of: " + nextInOrderNode);
+
+            //Delete reference in tree
+            this.deleteNode(nextInOrderNode.getNodeKey());
+            this.returnAllNodes(TraversalTypes.INORDER);
+
+            nextInOrderNode.setLeftChildNode(toDeleteNode.getLeftChildNode());
+            nextInOrderNode.setRightChildNode(toDeleteNode.getRightChildNode());
+            System.out.println("Next in order now has a left child node of: " + nextInOrderNode.getLeftChildNode() + ", and a right child node of: " + nextInOrderNode.getRightChildNode());
+
+            //set parent node to reference nextInOrderNode - remove parent reference
+            if (parentNode != null)
+            {
+                System.out.println("Parent node is not null!");
+                System.out.println("Parent node's left child node is: " + parentNode.getLeftChildNode());
+                System.out.println("Parent node's right child node is: " + parentNode.getRightChildNode());
+                if (parentNode.getLeftChildNode() == toDeleteNode)
+                {
+                    parentNode.setLeftChildNode(nextInOrderNode);
+                    System.out.println("Parent Node with key value: " + parentNode + ", is now referencing as it's left child next in order with key value: " + nextInOrderNode);
+                }
+                else if (parentNode.getRightChildNode() == toDeleteNode)
+                {
+                    parentNode.setRightChildNode(nextInOrderNode);
+                    System.out.println("Parent Node with key value: " + parentNode + ", is now referencing next in order as it's right child with key value: " + nextInOrderNode);
+                }
+            }
+
+            //if parent node is null then root references nextInOrderNode
+            else if (parentNode == null)
+            {
+                System.out.println("To delete node is the root of the tree, the root is now referencing nextInOrderNode with value: " + nextInOrderNode);
+                this.rootNode = nextInOrderNode;
+            }
+
+            //handle children node references
+
+            //dereference toDeleteNode - Garbage collection should pick it up
+            toDeleteNode.setRightChildNode(null);
+            toDeleteNode.setLeftChildNode(null);
+
+            System.out.println("--------------------------------------");
+            System.out.println("After deleting node with value: " + KeyValue);
+            this.returnAllNodes(BinaryTree.TraversalTypes.INORDER);
+        }
 
     }
 
